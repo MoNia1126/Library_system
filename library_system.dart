@@ -1,19 +1,48 @@
-// Book class represents a book in the library
+void main() {
+  // Create a new library instance
+  Library library = Library();
+
+  // Add books to the library
+  library.addBook(Book(1, 'The Merchant of Venice', false));
+  library.addBook(Book(2, 'Good Heart', false));
+  library.addBook(Book(3, 'Five on a Treasure Island', false));
+
+  // Add users to the library
+  library.addUser(User(1, 'Monia'));
+  library.addUser(User(2, 'Mohamed'));
+  library.addUser(User(3, 'Ahmed'));
+
+  // Borrow and return books for users
+  library.borrowBook(1, 1);
+  library.borrowBook(2, 2);
+  library.borrowBook(3, 3);
+
+  library.returnBook(1, 1);
+
+  library.displayInfo();
+
+  library.borrowBook(3, 2);
+
+  // Display library info
+  library.displayInfo();
+}
+
+// Book class
 class Book {
   int id;
   String title;
-  bool isBorrowed = false;
-  // Constructor to initialize book with an ID and title
-  Book(this.id, this.title);
+  bool isBorrowed;
 
-  // Method to display the book's information
+  Book(this.id, this.title, this.isBorrowed);
+
+  // Method to display the book's info
   void displayInfo() {
     print(
         'Book ID: $id, Title: "$title", Borrowed: ${isBorrowed ? "Yes" : "No"}');
   }
 }
 
-// User class represents a user who can borrow or return books
+// User class
 class User {
   int id;
   String name;
@@ -25,112 +54,61 @@ class User {
   }
 }
 
-// Library class manages books and users
+// Library class
 class Library {
-  List<Book> books = []; // List to store books in the library
-  List<User> users = []; // List to store users in the library
+  List<Book> books = [];
+  List<User> users = [];
 
   // Method to add a book to the library
   void addBook(Book book) {
-    books.add(book); // Add the book to the books list
+    books.add(book);
     print('Book "${book.title}" added to the library.');
   }
 
   // Method to add a user to the library
   void addUser(User user) {
-    users.add(user); // Add the user to the users list
+    users.add(user);
     print('User "${user.name}" added to the library.');
   }
 
-  // Method to borrow a book by a user
+  // Method to borrow a book by a user id and book id
   void borrowBook(int bookId, int userId) {
-    // Find the book by its ID
-    final book = books.firstWhere((b) => b.id == bookId);
-    // Find the user by their ID
-    final user = users.firstWhere((u) => u.id == userId);
+    final book = books.firstWhere((book) => book.id == bookId);
+    final user = users.firstWhere((user) => user.id == userId);
 
-    // Check if the book and user exist
-    if (book == null) {
-      print(
-          'Error: Book with ID $bookId not found.'); // If book not found, print error
-      return;
-    }
-    if (user == null) {
-      print(
-          'Error: User with ID $userId not found.'); // If user not found, print error
-      return;
-    }
     if (book.isBorrowed) {
-      print(
-          'Error: Book "${book.title}" is already borrowed.'); // If book is already borrowed, print error
+      print('Error: Book "${book.title}" is already borrowed by ${user.name}');
       return;
     }
-    // If book is available, mark it as borrowed
     book.isBorrowed = true;
-    print(
-        'Book "${book.title}" borrowed by ${user.name}.'); // Print confirmation
+    print('Book "${book.title}" borrowed by ${user.name}.');
   }
 
   // Method to return a book to the library
-  void returnBook(int bookId) {
-    // Find the book by its ID
-    Book? book = books.firstWhere((b) => b.id == bookId);
+  void returnBook(int bookId, int userId) {
+    Book book = books.firstWhere((book) => book.id == bookId);
+    User user = users.firstWhere((user) => user.id == userId);
 
-    // Check if the book exists
-    if (book == null) {
-      print(
-          'Error: Book with ID $bookId not found.'); // If book not found, print error
-      return;
-    }
     if (!book.isBorrowed) {
-      print(
-          'Error: Book "${book.title}" was not borrowed.'); // If the book wasn't borrowed, print error
+      print('Book ${book.title} is not borrowed by ${user.name}');
       return;
     }
 
-    // If book is borrowed, mark it as returned
     book.isBorrowed = false;
-    print(
-        'Book "${book.title}" returned to the library.'); // Print confirmation
+    print('Book ${book.title} has been returned by ${user.name}');
   }
 
-  // Method to display the current state of the library
+  // Method to display books and user
   void displayInfo() {
-    print('\n--- Library Information ---');
+    print('\n--------- Library Information ---------');
     print('\nBooks:');
-    // Display all books in the library
     for (var book in books) {
       book.displayInfo();
     }
     print('\nUsers:');
-    // Display all users in the library
     for (var user in users) {
       user.displayInfo();
     }
     print('--- End of Information ---\n');
   }
-}
-
-void main() {
-  // Create a new library instance
-  Library library = Library();
-
-  // Add books to the library
-  library.addBook(
-      Book(1, 'The Merchant of Venice')); // Add book The Merchant of Venice
-  library.addBook(Book(2, 'Good Heart'));
-  library.addBook(Book(3, 'Five on a Treasure Island'));
-
-  // Add users to the library
-  library.addUser(User(1, 'Monia')); // Add user Alice
-  library.addUser(User(2, 'Mohamed')); // Add user Bob
-
-  // Borrow and return books for users
-  library.borrowBook(1, 1); // Monia borrows "The Merchant of Venice"
-  library.borrowBook(2, 2);
-  library.returnBook(1);
-  library.borrowBook(3, 2);
-
-  // Display the final state of the library
-  library.displayInfo();
 }

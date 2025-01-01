@@ -1,6 +1,6 @@
 # Library System in Dart
 
-This project demonstrates a simple library system for managing books and users. Users can borrow and return books, and the system keeps track of the state of books.
+This project demonstrates a simple library system for managing books and users. Users can borrow and return books, and the system keeps track of the info about books
 
 ## Features:
 - **Book Class**: Represents books with attributes `id`, `title`, and `borrowed`.
